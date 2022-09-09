@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using WebApi.Models;
 using WebApi.ModelDto;
-using System.Collections.Generic;
 
 namespace WebApi.Mapping
 {
