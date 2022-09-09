@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Context;
+using WebApi.Interfaces;
 using WebApi.ModelDto;
 using WebApi.Models;
+using WebApi.Services;
 
 namespace WebApi.Controllers
 {
@@ -16,36 +18,25 @@ namespace WebApi.Controllers
     [Route("[controller]")]
     public class UserController : Controller
     {
-        private readonly DataBaseContext _context;
         private readonly IMapper _mapper;
+        private readonly UserService _userSerive;
 
         public UserController(DataBaseContext context, IMapper mapper)
         {
-            _context = context;
             _mapper = mapper;
+            _userSerive = new UserService(context, _mapper);
         }
 
         [HttpGet]
         public async Task<List<UserDto>> GetAllUsers()
-        {   
-            var users = await _context.Users.ToListAsync();
-            return _mapper.Map<List<User>, List<UserDto>>(users);
+        {
+            return await _userSerive.GetAllUsers();
         }
 
         [HttpGet("{id}")]
         public UserDto GetUser(int? id)
         {
-            var user = _context.Users.Find(id);
-
-            return _mapper.Map<UserDto>(user);
+            return _userSerive.GetUser(id);
         }
-
-        #region Private Methods
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
-        }
-
-        #endregion
     }
 }
