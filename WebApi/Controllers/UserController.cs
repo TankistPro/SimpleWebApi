@@ -26,9 +26,10 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<List<User>> GetAllUsers()
-        {
-            return await _context.Users.ToListAsync();
+        public async Task<List<UserDto>> GetAllUsers()
+        {   
+            var users = await _context.Users.ToListAsync();
+            return _mapper.Map<List<User>, List<UserDto>>(users);
         }
 
         [HttpGet("{id}")]
