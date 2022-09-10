@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Context;
 using WebApi.Interfaces;
+using WebApi.Interfaces.Services;
 using WebApi.ModelDto;
 using WebApi.Models;
 using WebApi.Services;
@@ -19,12 +20,12 @@ namespace WebApi.Controllers
     public class UserController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly UserService _userSerive;
+        private readonly IUserService _userSerive;
 
-        public UserController(DataBaseContext context, IMapper mapper)
+        public UserController(DataBaseContext context, IMapper mapper, IUserService userService)
         {
             _mapper = mapper;
-            _userSerive = new UserService(context, _mapper);
+            _userSerive = userService;
         }
 
         [HttpGet]

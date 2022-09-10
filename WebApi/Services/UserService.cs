@@ -3,20 +3,22 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApi.Context;
 using WebApi.Interfaces;
+using WebApi.Interfaces.Repositories;
+using WebApi.Interfaces.Services;
 using WebApi.ModelDto;
 using WebApi.Repositories;
 
 namespace WebApi.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly IMapper _mapper;
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UserService(DataBaseContext context, IMapper mapping)
+        public UserService(DataBaseContext context, IMapper mapping, IUserRepository userRepository)
         {
             _mapper = mapping;
-            _userRepository = new UserRepository(context);
+            _userRepository = userRepository;
         }
 
         public async Task<List<UserDto>> GetAllUsers()

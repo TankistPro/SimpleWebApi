@@ -7,17 +7,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using WebApi.Context;
 using WebApi.Interfaces;
+using WebApi.Interfaces.Repositories;
+using WebApi.Interfaces.Services;
 using WebApi.Mapping;
 using WebApi.Models;
 using WebApi.Repositories;
+using WebApi.Services;
 
 namespace WebApi
 {
@@ -33,6 +31,10 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IBaseRepository<User>, BaseRepository<User>>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IUserRepository, UserRepository>();
+
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
