@@ -31,20 +31,8 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IBaseRepository<User>, BaseRepository<User>>();
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IUserRepository, UserRepository>();
-
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-            string connectionString = config.GetConnectionString("DefaultConnection");
-
-            services.AddControllers();
-            services.AddAutoMapper(typeof(AppMapping));
-            services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(connectionString));
+            services.InitServices();
+            services.InitDbContext();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
