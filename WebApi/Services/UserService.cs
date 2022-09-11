@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApi.Context;
@@ -6,6 +7,7 @@ using WebApi.Interfaces;
 using WebApi.Interfaces.Repositories;
 using WebApi.Interfaces.Services;
 using WebApi.ModelDto;
+using WebApi.Models;
 using WebApi.Repositories;
 
 namespace WebApi.Services
@@ -15,7 +17,7 @@ namespace WebApi.Services
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
 
-        public UserService(DataBaseContext context, IMapper mapping, IUserRepository userRepository)
+        public UserService(IMapper mapping, IUserRepository userRepository)
         {
             _mapper = mapping;
             _userRepository = userRepository;
@@ -38,6 +40,29 @@ namespace WebApi.Services
             var user = _userRepository.GetById((int)id);
 
             return _mapper.Map<UserDto>(user);
+        }
+
+        public async Task<bool> RegistrationUser(RegistrationUserDto user)
+        {
+            try
+            {
+                bool isUserExsist = _userRepository.IsUserExists(user.Email);
+
+                if (isUserExsist)
+                {
+                    return false;
+                }
+
+                var userMap = _mapper.Map<User>(user);
+
+                var status = await _userRepository.Add(userMap);
+
+                return status;
+            } 
+            catch
+            {
+                return false;
+            }
         }
     }
 }

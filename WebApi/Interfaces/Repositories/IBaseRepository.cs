@@ -7,7 +7,7 @@ namespace WebApi.Interfaces
     {
         public Task<List<TEntity>> GetAll();
         public TEntity GetById(int id);
-        public bool Add(TEntity entity);
+        public Task<bool> Add(TEntity entity);
         public bool Remove(TEntity entity);
         public bool Update(TEntity entity);
     }

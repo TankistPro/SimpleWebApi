@@ -9,6 +9,7 @@ namespace WebApi.Mapping
         public AppMapping()
         {
             CreateMap<UserDto, User>().ReverseMap();
+            CreateMap<RegistrationUserDto, User>().ReverseMap();
         }
     }
 }

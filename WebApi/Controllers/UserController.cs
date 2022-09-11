@@ -39,5 +39,14 @@ namespace WebApi.Controllers
         {
             return _userSerive.GetUser(id);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult<bool>> RegistrationUser([FromBody] RegistrationUserDto user) 
+        { 
+            var status = await _userSerive.RegistrationUser(user);
+
+            return Ok(status); 
+        }
     }
 }

@@ -17,11 +17,12 @@ namespace WebApi.Repositories
             _dbSet = _context.Set<TEntity>();
         } 
 
-        public bool Add(TEntity entity)
+        public async Task<bool> Add(TEntity entity)
         {
             try
             {
-                _dbSet.Add(entity);
+                await _dbSet.AddAsync(entity);
+                _context.SaveChanges();
                 return true;
             }
             catch
@@ -61,6 +62,7 @@ namespace WebApi.Repositories
             try
             {
                 _dbSet.Remove(entity);
+                _context.SaveChanges();
                 return true;
             }
             catch
@@ -74,7 +76,7 @@ namespace WebApi.Repositories
             try
             {
                 _dbSet.Update(entity);
-
+                _context.SaveChanges();
                 return true;
             }
             catch

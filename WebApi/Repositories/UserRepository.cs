@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using WebApi.Context;
 using WebApi.Interfaces;
 using WebApi.Interfaces.Repositories;
@@ -17,9 +18,9 @@ namespace WebApi.Repositories
             _userRepository = userRepository;
         }
 
-        public bool IsUserExists(int id)
+        public bool IsUserExists(string email)
         {
-            return _context.Users.Any(u => u.Id == id);
+            return _context.Users.Any(u => u.Email == email);
         }
     }
 }
