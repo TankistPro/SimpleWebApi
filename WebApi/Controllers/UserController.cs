@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Context;
 using WebApi.Interfaces;
@@ -15,16 +16,15 @@ using WebApi.Services;
 
 namespace WebApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class UserController : Controller
     {
-        private readonly IMapper _mapper;
         private readonly IUserService _userSerive;
 
-        public UserController(DataBaseContext context, IMapper mapper, IUserService userService)
+        public UserController(IUserService userService)
         {
-            _mapper = mapper;
             _userSerive = userService;
         }
 
