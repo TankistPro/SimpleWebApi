@@ -48,5 +48,19 @@ namespace WebApi.Controllers
 
             return Ok(status); 
         }
+
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public ActionResult<ServerResponseDto<TokensDto>> Login([FromBody] LoginUserDto user)
+        {
+            if (user == null || user.Email == null || user.Password == null)
+            {
+                return BadRequest("Incorrect body data");
+            }
+
+            var response = _userSerive.LoginUser(user);
+
+            return response;
+        }
     }
 }

@@ -9,5 +9,6 @@ namespace WebApi.Interfaces.Services
         public Task<List<UserDto>> GetAllUsers();
         public UserDto GetUser(int? id);
         public Task<bool> RegistrationUser(RegistrationUserDto user);
+        public ServerResponseDto<TokensDto> LoginUser(LoginUserDto user);
     }
 }

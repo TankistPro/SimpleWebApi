@@ -22,5 +22,10 @@ namespace WebApi.Repositories
         {
             return _context.Users.Any(u => u.Email == email);
         }
+
+        public User GetUserByEmail(string email)
+        {
+            return _context.Users.Where(u => u.Email == email).FirstOrDefault();
+        }
     }
 }

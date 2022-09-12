@@ -64,5 +64,39 @@ namespace WebApi.Services
                 return false;
             }
         }
+        public ServerResponseDto<TokensDto> LoginUser(LoginUserDto user)
+        {
+            var candidate = _userRepository.GetUserByEmail(user.Email);
+            bool status = false;
+            string message = null;
+            TokensDto tokens = new TokensDto();
+
+            if (candidate != null)
+            {
+                if (user.Password == candidate.Password)
+                {
+                    status = true;
+                    tokens = new TokensDto()
+                    {
+                        access_toke = "Ok"
+                    };
+                } 
+                else
+                {
+                    message = "Неверный логин или пароль";
+                }
+            } 
+            else
+            {
+                message = "Пользователь не найден";
+            }
+
+            return new ServerResponseDto<TokensDto>()
+            {
+                status = status,
+                message = message,
+                response = status ? tokens : null
+            };
+        }
     }
 }
