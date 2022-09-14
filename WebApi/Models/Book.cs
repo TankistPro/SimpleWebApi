@@ -7,6 +7,7 @@
         public int Year { get; set; }
         public int Price { get; set; }  
         public string Gener { get; set; }
+        public int count { get; set; }
 
         public int AuthorId { get; set; }
         public Author Author { get; set; }

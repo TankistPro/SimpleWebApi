@@ -43,7 +43,10 @@ namespace WebApi
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidAudience = AuthOptions.AUDIENCE,
+                        ValidIssuer = AuthOptions.ISSUER,
                         IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey()
                     };
                 });
@@ -60,7 +63,8 @@ namespace WebApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
-                
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

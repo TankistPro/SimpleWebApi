@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using WebApi.Context;
 using WebApi.Interfaces;
@@ -66,25 +69,15 @@ namespace WebApi.Services
         }
         public ServerResponseDto<TokensDto> LoginUser(LoginUserDto user)
         {
-            var candidate = _userRepository.GetUserByEmail(user.Email);
+            var identity = _userRepository.GetIndentity(user.Email);
             bool status = false;
             string message = null;
             TokensDto tokens = new TokensDto();
 
-            if (candidate != null)
+            if (identity != null)
             {
-                if (user.Password == candidate.Password)
-                {
-                    status = true;
-                    tokens = new TokensDto()
-                    {
-                        access_toke = "Ok"
-                    };
-                } 
-                else
-                {
-                    message = "Неверный логин или пароль";
-                }
+                status = true;
+                tokens = GenerateToken(identity);
             } 
             else
             {
@@ -98,5 +91,30 @@ namespace WebApi.Services
                 response = status ? tokens : null
             };
         }
+
+        #region privateMethods
+        private TokensDto GenerateToken(ClaimsIdentity identity)
+        {
+            var now = DateTime.UtcNow;
+
+            var jwt = new JwtSecurityToken(
+                issuer: AuthOptions.ISSUER,
+                audience: AuthOptions.AUDIENCE,
+                notBefore: now,
+                claims: identity.Claims,
+                expires:now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
+                signingCredentials: new SigningCredentials(
+                    AuthOptions.GetSymmetricSecurityKey(),
+                    SecurityAlgorithms.HmacSha256)
+                );
+
+            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+            return new TokensDto()
+            {
+                access_toke = encodedJwt
+            };
+        }
+        #endregion
     }
 }

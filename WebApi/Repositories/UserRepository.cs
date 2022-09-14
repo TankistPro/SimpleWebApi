@@ -1,5 +1,6 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using WebApi.Context;
 using WebApi.Interfaces;
 using WebApi.Interfaces.Repositories;
@@ -26,6 +27,26 @@ namespace WebApi.Repositories
         public User GetUserByEmail(string email)
         {
             return _context.Users.Where(u => u.Email == email).FirstOrDefault();
+        }
+
+        public ClaimsIdentity GetIndentity(string email)
+        {
+            var user = GetUserByEmail(email);
+
+            if (user != null)
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email)
+                };
+
+                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
+                    ClaimsIdentity.DefaultNameClaimType);
+
+                return claimsIdentity;
+            }
+
+            return null;
         }
     }
 }
