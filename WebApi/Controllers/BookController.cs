@@ -17,7 +17,10 @@ namespace WebApi.Controllers
         {
             _context = context;
         }
-        
+
+        /// <summary>
+        /// Получение всех книг
+        /// </summary>
         [HttpGet]
         public async Task<List<Book>> Get()
         {

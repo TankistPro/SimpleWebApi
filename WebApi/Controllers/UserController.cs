@@ -28,18 +28,27 @@ namespace WebApi.Controllers
             _userSerive = userService;
         }
 
+        /// <summary>
+        /// Получение всех пользователей
+        /// </summary>
         [HttpGet]
         public async Task<List<UserDto>> GetAllUsers()
         {
             return await _userSerive.GetAllUsers();
         }
 
+        /// <summary>
+        /// Получение пользователя по ID
+        /// </summary>
         [HttpGet("{id}")]
         public UserDto GetUser(int? id)
         {
             return _userSerive.GetUser(id);
         }
 
+        /// <summary>
+        /// Регистрация пользователя
+        /// </summary>
         [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult<bool>> RegistrationUser([FromBody] RegistrationUserDto user) 
@@ -49,6 +58,9 @@ namespace WebApi.Controllers
             return Ok(status); 
         }
 
+        /// <summary>
+        /// Авторизация пользователя
+        /// </summary>
         [HttpPost("login")]
         [AllowAnonymous]
         public ActionResult<ServerResponseDto<TokensDto>> Login([FromBody] LoginUserDto user)

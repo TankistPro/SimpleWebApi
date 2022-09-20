@@ -9,7 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.IO;
+using System.Reflection;
 using WebApi.Context;
 using WebApi.Interfaces;
 using WebApi.Interfaces.Repositories;
@@ -35,6 +37,18 @@ namespace WebApi
         {
             services.InitServices();
             services.InitDbContext();
+
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "SimpleWebApi"
+                });
+
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+            });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -66,6 +80,13 @@ namespace WebApi
 
             app.UseAuthentication();
             app.UseAuthorization();
+            
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+
+            });
 
             app.UseEndpoints(endpoints =>
             {
